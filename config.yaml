@@ -5,7 +5,7 @@ options:
     description: Name of the level, will be generated if it doesn't exist
   allow-nether:
     default: true
-    type: string
+    type: bool
     description: Allow generation of the nether, true or false
   motd:
     default: Juju Powered Minecraft Server
@@ -17,11 +17,11 @@ options:
     description: Maximum players allowed on the server
   spawn-animals:
     default: true
-    type: string
+    type: bool
     description: Generate animals, true or false
   spawn-monsters:
     default: true
-    type: string
+    type: bool
     description: Generate monsters, true or false
   difficulty:
     default: 1
