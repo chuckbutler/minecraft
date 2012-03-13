@@ -1,3 +1,4 @@
 #!/bin/sh
 
+juju-log "Stopping Minecraft"
 stop minecraft

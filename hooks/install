@@ -1,11 +1,27 @@
 #!/bin/sh
 
-juju-log "Installing OpenJDK"
-apt-get install -y openjdk-6-jre charm-helper-sh
+apt-get update && apt-get upgrade -y
 
-juju-log "Add Minecraft init script"
-cp opt/minecraft /etc/init/minecraft.conf
+juju-log "Check if we've installed Minecraft before"
 
-juju-log "Downloading Minecraft"
-mkdir -p /opt/minecraft/
-wget "https://s3.amazonaws.com/MinecraftDownload/launcher/minecraft_server.jar" -O /opt/minecraft/minecraft_server.jar
+if [ ! -f "/opt/minecraft/minecraft_server.jar" ]; then
+	juju-log "Installing OpenJDK"
+	apt-get install -y openjdk-6-jre charm-helper-sh
+
+	juju-log "Add Minecraft init script"
+	cp opt/minecraft /etc/init/minecraft.conf
+
+	juju-log "Downloading Minecraft"
+	mkdir -p /opt/minecraft/
+	wget "https://s3.amazonaws.com/MinecraftDownload/launcher/minecraft_server.jar" -O /opt/minecraft/minecraft_server.jar
+else
+	juju-log "Check for upgrades to current installation"
+	wget "https://s3.amazonaws.com/MinecraftDownload/launcher/minecraft_server.jar" -O /tmp/minecraft_server.jar
+	cmp /opt/minecraft/minecraft_server.jar /tmp/minecraft_server.jar > /dev/null
+
+	if [ "$?" -ne 0 ]; then
+		rm -f /opt/minecraft/minecraft_server.jar
+	fi
+
+	mv /tmp/minecraft_server.jar /opt/minecraft/
+fi

@@ -1,18 +1,7 @@
 #!/bin/sh
 
-juju-log 'Updating Minecraft Server!'
+juju-log 'Running an upgrade'
 
-wget "https://s3.amazonaws.com/MinecraftDownload/launcher/minecraft_server.jar" -O /tmp/minecraft_server.jar
-diff /opt/minecraft/minecraft_server.jar /tmp/minecraft_server.jar > /dev/null
-
-if [ "$?" -gt 0 ]; then
-	juju-log "Update is available"
-	juju-log "Stopping Minecraft"
-
-	stop minecraft
-	rm -f /opt/minecraft/minecraft_server.jar
-	mv /tmp/minecraft_server.jar /opt/minecraft/
-
-	juju-log "Restarting Minecraft"
-	start minecraft
-fi
+. hooks/stop
+. hooks/install
+. hooks/start
