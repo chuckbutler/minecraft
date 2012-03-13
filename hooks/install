@@ -21,7 +21,8 @@ else
 
 	if [ "$?" -ne 0 ]; then
 		rm -f /opt/minecraft/minecraft_server.jar
+		mv /tmp/minecraft_server.jar /opt/minecraft/
+	else
+		rm -f /tmp/minecraft_server.jar
 	fi
-
-	mv /tmp/minecraft_server.jar /opt/minecraft/
 fi
