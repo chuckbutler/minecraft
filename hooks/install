@@ -1,23 +1,28 @@
 #!/bin/sh
 
-## https://gist.github.com/1336585
+apt-get update && apt-get upgrade -y
 
-juju-log "Installing OpenJDK"
-apt-get install -y openjdk-6-jre
+juju-log "Check if we've installed Minecraft before"
 
-juju-log "Add Minecraft init script" 
-cp opt/minecraft /etc/init/minecraft.conf
+if [ ! -f "/opt/minecraft/minecraft_server.jar" ]; then
+	juju-log "Installing OpenJDK"
+	apt-get install -y openjdk-6-jre charm-helper-sh
 
-juju-log "Downloading Minecraft"
-mkdir -p /opt/minecraft/
-wget "https://s3.amazonaws.com/MinecraftDownload/launcher/minecraft_server.jar" -O /opt/minecraft/minecraft_server.jar
+	juju-log "Add Minecraft init script"
+	cp opt/minecraft /etc/init/minecraft.conf
 
-juju-log "Branching Minecraft Checksum"
-bzr branch lp:~marcoceppi/charm/oneiric/minecraft/checksum
+	juju-log "Downloading Minecraft"
+	mkdir -p /opt/minecraft/
+	wget "https://s3.amazonaws.com/MinecraftDownload/launcher/minecraft_server.jar" -O /opt/minecraft/minecraft_server.jar
+else
+	juju-log "Check for upgrades to current installation"
+	wget "https://s3.amazonaws.com/MinecraftDownload/launcher/minecraft_server.jar" -O /tmp/minecraft_server.jar
+	cmp /opt/minecraft/minecraft_server.jar /tmp/minecraft_server.jar > /dev/null
 
-md5sum -c  checksum/checksums
-if [ "$?" -ne 0 ]; then
-	juju-log "Checksum conditions failed! Exiting"
-	exit 2 #Checksum error number, I just made it up for this.
+	if [ "$?" -ne 0 ]; then
+		rm -f /opt/minecraft/minecraft_server.jar
+		mv /tmp/minecraft_server.jar /opt/minecraft/
+	else
+		rm -f /tmp/minecraft_server.jar
+	fi
 fi
-

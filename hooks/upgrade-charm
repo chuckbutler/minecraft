@@ -1,0 +1,7 @@
+#!/bin/sh
+
+juju-log 'Running an upgrade'
+
+. hooks/stop
+. hooks/install
+. hooks/start

@@ -1,3 +1,4 @@
 #!/bin/bash
 
+juju-log "Starting Minecraft"
 start minecraft
