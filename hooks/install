@@ -13,10 +13,10 @@ if [ ! -f "/opt/minecraft/minecraft_server.jar" ]; then
 
 	juju-log "Downloading Minecraft"
 	mkdir -p /opt/minecraft/
-	wget "https://s3.amazonaws.com/MinecraftDownload/launcher/minecraft_server.jar" -O /opt/minecraft/minecraft_server.jar
+	wget "https://s3.amazonaws.com/Minecraft.Download/versions/1.7.4/minecraft_server.1.7.4.jar" -O /opt/minecraft/minecraft_server.jar
 else
 	juju-log "Check for upgrades to current installation"
-	wget "https://s3.amazonaws.com/MinecraftDownload/launcher/minecraft_server.jar" -O /tmp/minecraft_server.jar
+	wget "https://s3.amazonaws.com/Minecraft.Download/versions/1.7.4/minecraft_server.1.7.4.jar" -O /tmp/minecraft_server.jar
 	cmp /opt/minecraft/minecraft_server.jar /tmp/minecraft_server.jar > /dev/null
 
 	if [ "$?" -ne 0 ]; then
